@@ -11,6 +11,12 @@ public class wingcounter : MonoBehaviour
     public int count = 0;
     public TextMeshProUGUI countText;
 
+    public Animator animator;
+    public AudioSource audioSource;
+    public AudioClip explosionSound;
+    public GameObject hungryGuy;
+    public GameObject animatedSprite;
+
    
 
     // Start is called before the first frame update
@@ -21,6 +27,10 @@ public class wingcounter : MonoBehaviour
         {
             wingScript.onFourthImage.AddListener(IncrementCounter);
         }
+        if (animatedSprite != null)
+        {  
+            animatedSprite.SetActive(false);
+        }
     }
 
     void IncrementCounter()
@@ -29,6 +39,51 @@ public class wingcounter : MonoBehaviour
         UpdateCountDisplay();
         Debug.Log("chicken wings eaten: " + count);
 
+        if (count == 25) 
+        {
+            TriggerExplosionEvents();
+        }
+    }
+
+
+   public void TriggerExplosionEvents()
+    {
+
+        if (animatedSprite != null)
+        {
+            animatedSprite.SetActive(true);
+            Destroy(animatedSprite, 0.5f);
+        }
+
+       
+
+        if (audioSource != null && explosionSound != null)
+        {
+            audioSource.PlayOneShot(explosionSound);
+        }
+
+        if (hungryGuy != null)
+        {
+            hungryGuy.SetActive(false);
+        }
+
+        clickwing wingScript = FindObjectOfType<clickwing>();
+        if (wingScript != null)
+        {
+            wingScript.DestroyChickenWing();
+        }
+    }
+
+    IEnumerator HideAfterAnimation()
+    {
+        float animationLength = animator.GetCurrentAnimatorStateInfo(0).length;
+
+        yield return new WaitForSeconds(animationLength);
+
+        if (animatedSprite != null)
+        {
+            animatedSprite.SetActive(false);
+        }
     }
 
     void UpdateCountDisplay()

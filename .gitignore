@@ -27,3 +27,6 @@
 *.mdb
 *.opendb
 *.VC.db
+WebGL Builds/
+connectwebgl.zip
+webgl_sharing

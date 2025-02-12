@@ -18,9 +18,15 @@ public class clickwing : MonoBehaviour, IPointerClickHandler
 
     public float newVolume;
 
+    public float minX = -400f;
+    public float maxX = 400f;
+    public float minY = -300f;
+    public float maxY = 300f;
+
     private Image imageComponent;
     private AudioSource audioSource;
     private int currentImageIndex = 0;
+    private RectTransform rectTransform;
 
     
     
@@ -34,7 +40,7 @@ public class clickwing : MonoBehaviour, IPointerClickHandler
         audioSource = gameObject.AddComponent<AudioSource>();
         audioSource.playOnAwake = false;
         audioSource.clip = clickSound;
-
+        rectTransform = GetComponent<RectTransform>();
        
 
     }
@@ -43,6 +49,20 @@ public class clickwing : MonoBehaviour, IPointerClickHandler
     {
         audioSource.volume = newVolume;
     }
+
+    public void DestroyChickenWing()
+    {
+        Destroy(gameObject);
+    }
+
+    public void MoveToRandomPosition()
+    {
+        float randomX = Random.Range(minX, maxX);
+        float randomY = Random.Range(minY, maxY);
+
+        rectTransform.anchoredPosition = new Vector2(randomX, randomY); 
+    }
+
 
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -55,6 +75,7 @@ public class clickwing : MonoBehaviour, IPointerClickHandler
         {
             case 0:
                 imageComponent.sprite = firstImage;
+                MoveToRandomPosition();
                 break;
             case 1:
                 imageComponent.sprite = secondImage;
